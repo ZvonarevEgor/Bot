@@ -1,4 +1,4 @@
-class Command():
+class Command:
     def __init__(self, keys, description):
         self.keys = keys
         self.description = description
@@ -11,7 +11,7 @@ class Command():
         pass
 
 
-class Sessions():
+class Sessions:
     sessions_dict = {}
 
     def __init__(self):
