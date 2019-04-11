@@ -1,5 +1,4 @@
 import requests
-import json
 from bs4 import BeautifulSoup
 from command_class import Command
 
@@ -9,26 +8,27 @@ class CommandParserHH(Command):
         super(CommandParserHH, self).__init__(keys, description)
 
     # Get a list with information from all the pages
-    def get_all_pages(self, area, period, experience, text):
+    @staticmethod
+    def get_all_pages(area, period, experience, text):
         list_pages = []
         i = 0
 
         while True:
             url = 'https://api.hh.ru/vacancies'
-            parametres = {'text': text, 'area': area, 'experience': experience,
+            parameters = {'text': text, 'area': area, 'experience': experience,
                           'premium': 'True', 'order_by': 'relevance',
                           'period': period, 'page': i}
-            r = requests.get(url, parametres)
+            r = requests.get(url, parameters)
             i_list = r.json()
             list_pages.append(i_list)
             pages_count = i_list['pages']
             if i == pages_count - 1:
                 return list_pages
-                break
             i += 1
 
     # Making 1 list only with vacancies
-    def general_list_pages(self, list_pages):
+    @staticmethod
+    def general_list_pages(list_pages):
         general_list = []
         for dict_ in list_pages:
             for vacancy in dict_['items']:
@@ -43,12 +43,12 @@ class CommandParserHH(Command):
             name_of_vac = vacancy['name']
             company = vacancy['employer']['name']
             url = vacancy['alternate_url']
-            # Some keys can be nontype
+            # Some keys can be none
             sal_from, sal_to, sal_cur = self.get_salary(vacancy)
             requir = vacancy['snippet'].get('requirement',
                                             'Требования не указаны')
 
-            if sal_from == '_' and sal_to == ('_'):
+            if sal_from == '_' and sal_to == '_':
                 main_str = '{} \n- Зарплата не указана. \n- {} \n- {}\n{}\
                                  \n\n'.format(name_of_vac, company, requir, url)
             else:
@@ -61,7 +61,8 @@ class CommandParserHH(Command):
         return filtered_vacancies
 
     # Some of the values of salary can be None
-    def get_salary(self, vacancy):
+    @staticmethod
+    def get_salary(vacancy):
         salary_key = vacancy.get('salary', 'none')
         if salary_key == 'none':
             sal_from, sal_to, sal_cur = '_', '_', '_'
@@ -75,12 +76,14 @@ class CommandParserHH(Command):
                 sal_cur = vacancy['salary'].get('currency', '_')
         return sal_from, sal_to, sal_cur
 
-    def upgrade_args(self, filtered_vacancies, state):
+    @staticmethod
+    def upgrade_args(filtered_vacancies, state):
         state.append(filtered_vacancies)
         return state
 
     # Form a message with vacancies to the user
-    def make_message(self, state, k):
+    @staticmethod
+    def make_message(state, k):
         all_vacancies = state[0][0]
         state[0][1] = state[0][1] + 1
         views = state[0][1]
@@ -102,13 +105,17 @@ class CommandParserHH(Command):
             for vacancy in state[5][:3]:
                 message += vacancy
             state[5] = state[5][3:]
+            k.clear_buttons()
+            k.add_button('Ещё')
+            k.add_button('Выход', color='negative')
             keyboard = k.dump()
             message += 'Для следующей страницы, напиши мне любой символ/слово.'
 
         return message, state, keyboard
 
     # Checking how the search area is entered
-    def test_area(self, state, k):
+    @staticmethod
+    def test_area(state, k):
         k.clear_buttons()
         k.add_button('3')
         k.add_button('7')
@@ -141,7 +148,8 @@ class CommandParserHH(Command):
         return message, state, keyboard
 
     # Checking how the search period is entered
-    def test_period(self, state, k):
+    @staticmethod
+    def test_period(state, k):
         message = 'Какой опыт? \n\n1) Нет опыта\n' \
                   '2) От 1 года до 3х\n3) От 3х до 6ти лет'
         k.clear_buttons()
@@ -170,7 +178,8 @@ class CommandParserHH(Command):
         return message, state, keyboard
 
     # Check, as introduced experience
-    def test_exp(self, state, k):
+    @staticmethod
+    def test_exp(state, k):
         k.clear_buttons()
         k.add_button('Выход', color='negative')
         keyboard = k.dump()
@@ -197,6 +206,8 @@ class CommandParserHH(Command):
 
     # Depending on the current session, I ask the right things
     def test_msgs(self, state, k):
+        message = ''
+        keyboard = k.dump()
         if len(state) == 1:
             k.clear_buttons()
             k.add_button('Москва')
@@ -218,9 +229,11 @@ class CommandParserHH(Command):
     # A function of the interaction with the bot
     def process(self, state, k):
         attachment = ''
+        message = ''
+        keyboard = k.dump()
         if len(state) < 5:
             message, state, keyboard = self.test_msgs(state, k)
-        if len(state) == 5:
+        elif len(state) == 5:
             list_pages = self.get_all_pages(*state[1:])
             general_list = self.general_list_pages(list_pages)
             filtered_vacancies = self.sort_information(general_list)
@@ -229,9 +242,5 @@ class CommandParserHH(Command):
             state[0].append(len(state[5]))
             state[0].append(0)
         if len(state) >= 6:
-            k.clear_buttons()
-            k.add_button('Ещё')
-            k.add_button('Выход', color='negative')
-            keyboard = k.dump()
             message, state, keyboard = self.make_message(state, k)
         return message, attachment, state, keyboard
