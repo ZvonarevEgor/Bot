@@ -6,7 +6,8 @@ class Wiki(Command):
     def __init__(self, keys, description):
         super(Wiki, self).__init__(keys, description)
 
-    def get_answer(self, text):
+    @staticmethod
+    def get_answer(text):
         wikipedia.set_lang('RU')
         answer = wikipedia.summary(text)
         return answer
