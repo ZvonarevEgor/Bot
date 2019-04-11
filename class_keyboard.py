@@ -1,7 +1,7 @@
 import copy
 
 
-class Keyboard_cls():
+class KeyboardCls:
     keyboard_ex = {"one_time": None, "buttons": [[]]}
     button_ex = {
         "action": {
