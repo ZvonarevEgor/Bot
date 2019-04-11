@@ -1,13 +1,14 @@
 import vkapi
+import json
 from command_class import Command, Sessions
 from command_parserHH import *
-from class_keyboard import Keyboard_cls
+from class_keyboard import KeyboardCls
 from command_wiki import Wiki
 
-k = Keyboard_cls()
+k = KeyboardCls()
 
 
-class Handler():
+class Handler:
     def __init__(self, command_list):
         self.sessions = Sessions()
         self.commands = command_list
