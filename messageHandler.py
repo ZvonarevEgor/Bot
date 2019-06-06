@@ -4,6 +4,8 @@ from command_class import Command, Sessions
 from command_parserHH import *
 from class_keyboard import KeyboardCls
 from command_wiki import Wiki
+from command_weather import CommandWeather
+from command_stat import CommandStatHH
 
 k = KeyboardCls()
 
