@@ -6,6 +6,9 @@ from time import sleep
 from command_class import Command
 # -*- coding: utf-8 -*-
 
+BAD_SYMBOLS = ['\\', '/', ':', '*', '?', '"', '<', '>', '|', '●', '!', '.',
+                   ',', ';', '(', ')', '»', '«', '-', '_', '+', '`']
+
 morph = pymorphy2.MorphAnalyzer()
 
 
@@ -76,9 +79,7 @@ class CommandStatHH(Command):
         clean_list = []
         for description in descriptions_list:
             description = description.lower()
-            bad = ['\\', '/', ':', '*', '?', '"', '<', '>', '|', '●', '!', '.',
-                   ',', ';', '(', ')', '»', '«', '-', '_', '+', '`']
-            clean_str = description.translate({ord(symbol): ' ' for symbol in bad})
+            clean_str = description.translate({ord(symbol): ' ' for symbol in BAD_SYMBOLS})
             list_words = clean_str.split(' ')
             clean_list.append([])
             for word in list_words:
