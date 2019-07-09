@@ -55,10 +55,7 @@ class Handler:
                             message, attachment, state, keyboard = process
                             self.sessions.state_update(user_id, state)
         else:
-            if len(data['fwd_messages']) > 1:
-                message = 'Пожалуйста, не делайте множественное пересылание сообщений.\nМаксимум 1 раз.'
-            else:
-                message = wav_parser.main(data)
+            message = wav_parser.main(data)
 
         keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
         keyboard = str(keyboard.decode('utf-8'))

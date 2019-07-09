@@ -35,10 +35,45 @@ def clean_directory():
     os.remove(WAV_FILE)
 
 
+def get_links(data):
+    links = []
+    if len(data['attachments']) > 0:
+        for attachment in data['attachments']:
+            links.append(attachment["audio_message"]["link_mp3"])
+    if len(data["fwd_messages"]) > 0:
+        for forward in data["fwd_messages"]:
+            if "fwd_messages" in forward:
+                if len(forward["fwd_messages"]) > 0:
+                    for fwd in forward["fwd_messages"]:
+                        if len(fwd['attachments']) > 0:
+                            for attachment in fwd['attachments']:
+                                links.append(attachment["audio_message"]["link_mp3"])
+                else:
+                    if len(forward['attachments']) > 0:
+                        for attachment in forward['attachments']:
+                            links.append(attachment["audio_message"]["link_mp3"])
+            else:
+                if len(forward['attachments']) > 0:
+                    for attachment in forward['attachments']:
+                        links.append(attachment["audio_message"]["link_mp3"])
+    return links
+
+
 def main(data):
-    link = data['attachments'][0]["audio_message"]["link_mp3"]
-    get_audiofile(link)
-    convert_to_wav()
-    message = speech_to_text()
-    clean_directory()
+    try:
+        links = get_links(data)
+    except:
+        message = 'Упс, ошибка. Возможно, присутствует множественное пересылание сообщений. ' \
+                  'Пожалуйста, не пересылайте сообщение более 2х раз.'
+        return message
+    try:
+        message = ''
+        for link in links:
+            get_audiofile(link)
+            convert_to_wav()
+            message += '{}\n\n'.format(speech_to_text())
+            clean_directory()
+    except:
+        message = 'Ой, ошибка. Возможно, запись пуста или является композицией.'
+
     return message
