@@ -19,7 +19,7 @@
 * В пакете [commands](https://github.com/ZvonarevEgor/Bot/tree/master/commands) хранятся все команды, которые может выполнить бот.
 * В модуле [vkapi.py](https://github.com/ZvonarevEgor/Bot/blob/master/vkapi.py) описываются методы взаимодействия с API Вконтакте.
 
-###Установка
+### Установка
 
 * Установить зависимости с помощью менеджера пакетов, находясь в корневом каталоге проекта `pip install -r requirements.txt`
 * В модуле [flask_app.py](https://github.com/ZvonarevEgor/Bot/blob/master/flask_app.py) поменять значения констант TOKEN и CONFIRMATION_TOKEN на свои. Их можно узнать в настройках группы, к которой будет привязан бот.
