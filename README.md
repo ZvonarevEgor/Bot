@@ -15,10 +15,17 @@
  
 ### Структура
 
-Файл [flask_app.py](https://github.com/ZvonarevEgor/Bot/blob/master/flask_app.py) является главным. Этот файл получает все сообщения от пользователей и передаёт в файл-обработчик [messageHandler.py](https://github.com/ZvonarevEgor/Bot/blob/master/messageHandler.py) для определения действий бота. 
-В пакете [commands](https://github.com/ZvonarevEgor/Bot/tree/master/commands) хранятся все команды, которые может выполнить бот.
-В файле [vkapi.py](https://github.com/ZvonarevEgor/Bot/blob/master/vkapi.py) описываются методы взаимодействия с API Вконтакте.
+* Модуль [flask_app.py](https://github.com/ZvonarevEgor/Bot/blob/master/flask_app.py) является главным. Этот файл получает все сообщения от пользователей и передаёт в файл-обработчик [messageHandler.py](https://github.com/ZvonarevEgor/Bot/blob/master/messageHandler.py) для определения действий бота. 
+* В пакете [commands](https://github.com/ZvonarevEgor/Bot/tree/master/commands) хранятся все команды, которые может выполнить бот.
+* В модуле [vkapi.py](https://github.com/ZvonarevEgor/Bot/blob/master/vkapi.py) описываются методы взаимодействия с API Вконтакте.
 
+###Установка
 
-### Контакты
-Вы можете написать мне в любое время в [Telegram](https://t.me/gonya1996)
+* Установить зависимости с помощью менеджера пакетов, находясь в корневом каталоге проекта `pip install -r requirements.txt`
+* В модуле [flask_app.py](https://github.com/ZvonarevEgor/Bot/blob/master/flask_app.py) поменять значения констант TOKEN и CONFIRMATION_TOKEN на свои. Их можно узнать в настройках группы, к которой будет привязан бот.
+
+### Разработчик
+* Звонарев Егор Консиантинович
+  * Почта: zvonarev96@mail.ru 
+  * Вы можете написать мне в любое время в [Telegram](https://t.me/gonya1996)
+
