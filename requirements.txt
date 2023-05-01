@@ -1,6 +1,6 @@
 requests==2.22.0
 beautifulsoup4==4.7.1
-Flask==1.1.1
+Flask==2.3.2
 pydub==0.23.1
 pymorphy2==0.8
 vk==2.0.2
